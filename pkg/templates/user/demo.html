@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <select name="state" id="state">
+        <option value="">select...</option>
+        {% for state in states %}
+            <option value="{{ state.state_id }}">{{ state.state_name }}</option>
+        {% endfor %}
+    </select> <br><br><br>
+    <select name="lga" id="lga"></select> <br><br>
+    <button type="button">Send</button>
+
+    <script src="{{url_for('static', filename='vendor/jquery/jquery.min.js')}}"></script>
+    <script src="{{url_for('static', filename='vendor/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
+
+    <!-- Plugin JavaScript -->
+    <script src="{{url_for('static', filename='vendor/jquery-easing/jquery.easing.min.js')}}"></script>
+
+    <!-- Custom JavaScript for this theme -->
+    <script src="{{url_for('static', filename='js/scrolling-nav.js')}}"></script>
+    <script>
+        $(document).ready(function(){
+            $("#state").change(function(){
+                var stateId= $(this).val()
+                var csrf="{{ csrf_token() }}"
+                $.ajax({
+                    url: '/lga/post/',
+                    type: 'POST',
+                    data: {"state_id":stateId, "csrf_token":csrf},
+                    success: function(resp){}
+                })
+            })
+        })
+    </script>
+</body>
+</html>
