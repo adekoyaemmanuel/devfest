@@ -266,7 +266,6 @@
   <div class="container px-4" id="custom-cardx">
     <h2 class="pb-2 border-bottom heading-text">Partner Accomodations</h2>
     <div class="row row-cols-1 row-cols-lg-4 align-items-stretch g-4 py-5">
-      {{ hotels }}
       {% if hotels %}
         {% if hotels['status'] == 1 %}
           {% for h in hotels ['data'] %}
