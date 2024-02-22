@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
-    <title>Moat Dev Fest 2024</title>
+    <title>Davidson Dev Fest 2024</title>
 
 <link href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
@@ -80,7 +80,7 @@
  
   <!-- content begins -->   
  
-<h1 class="h3 mb-3 text-center">Moat DevFest 2024 <br> Create Account</h1>
+<h1 class="h3 mb-3 text-center">Davidson DevFest 2024 <br> Create Account</h1>
 
 {% set m=get_flashed_messages(with_categories=True) %}
 {% if m %}
@@ -98,15 +98,16 @@
 <form action="" method="post">   
 <div class="form-group row mb-3">
   <div class="col-md-6">
-    <select name="state" id="" class="form-control">
+    <select name="state" id="state" class="form-control">
         <option value="">select State</option>
-        <option value="1">Abia</option>
+        {% for state in states %}
+          <option value="{{state.state_id}}">{{state.state_name}}</option>
+        {% endfor %}
     </select>
    </div>
    <div class="col-md-6">
-    <select name="lga" id="" class="form-control">
-      <option value="">select LGA</option>
-      <option value="1">Aba North</option>
+    <select name="lga" id="lga" class="form-control">
+      
     </select>
    </div>
 </div>
@@ -157,12 +158,39 @@
 <!-- FOOTER -->
 <footer class="container-fluid" style="height:100px; line-height:100px;">
   <p class="float-end"><a href="home_layout.html" style="color:#FF5714">Back to Homepage</a></p>
-  <p>&copy; 2023-2024 Moat Academy Cohort 26 Class Project</p>
+  <p>&copy; 2023-2024 Davidson Academy Cohort 26</p>
 </footer>
 
 </main>
+<script src="{{url_for('static', filename='vendor/jquery-easing/jquery.easing.min.js')}}"></script>
+
+<script src="{{url_for('static', filename='vendor/jquery/jquery.min.js')}}"></script>
 
 <script src="/static/bootstrap/js/bootstrap.bundle.min.js"></script>
       
+  <script>
+    $(document).ready(function(){
+      $("#state").change(function(){
+        var stateId = $(this).val()
+        var csrf = '{{csrf_token()}}'
+
+
+        $.ajax({
+          url: '/state/lgas/',
+          type: 'POST',
+          data: {"stateId":stateId, "csrf_token":csrf},
+          beforeSend: function() {
+            $("#lga").html('')
+          },
+          success: function(resp){
+            $('#lga').append(`<option value=''>select LGA</option>`)
+            for (let index = 0; index < resp.length; index++) {
+              $('#lga').append(`<option value='${resp[index].lga_id}'>${resp[index].lga_name}</option>`)
+            }
+          }
+        })
+      })
+    })
+  </script>
   </body>
 </html>

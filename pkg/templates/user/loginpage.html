@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
-    <title>Moat Dev Fest 2024</title>
+    <title>Davidson Dev Fest 2024</title>
 
 <link href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
@@ -80,7 +80,7 @@
  
   <!-- content begins -->   
  
-<h1 class="h3 mb-3 text-center">Moat DevFest 2024 <br> Please Login</h1>
+<h1 class="h3 mb-3 text-center">Davidson DevFest 2024 <br> Please Login</h1>
 
 {% set m=get_flashed_messages(with_categories=True) %}
 {% if m %}
@@ -110,7 +110,7 @@
     <button class="w-100 btn btn-lg btn-dark noround" type="submit">Login</button>
 
     <div class="form-floating">
-      <p> Don't have account? <a href="register.html">Signup</a>   </p>
+      <p> Don't have account? <a href="/register">Signup</a>   </p>
       <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
     </div>
   </form>
@@ -128,8 +128,8 @@
   
 <!-- FOOTER -->
 <footer class="container-fluid" style="height:100px; line-height:100px;">
-  <p class="float-end"><a href="home_layout.html" style="color:#FF5714">Back to Homepage</a></p>
-  <p>&copy; 2023-2024 Moat Academy Cohort 26 Class Project</p>
+  <p class="float-end"><a href="/" style="color:#FF5714">Back to Homepage</a></p>
+  <p>&copy; 2023-2024 Davidson Academy Cohort 26</p>
 </footer>
 
 </main>

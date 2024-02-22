@@ -1,9 +1,12 @@
 from flask import Flask
 from flask_wtf.csrf import CSRFProtect
 from flask_migrate import Migrate
+from flask_mail import Mail, Message
 
 migrate=Migrate()
 csrf=CSRFProtect()
+mail=Mail()
+
 def create_app():
     from pkg.models import db
     from pkg import config
@@ -15,8 +18,10 @@ def create_app():
     app.config .from_object(config.TestConfig)
     #db=sqlalchemly()
     db.init_app(app) #We moved the instantation of db to models.py 
-    csrf.init_app(app) 
+    csrf.init_app(app)
+    mail.init_app(app) 
     migrate.init_app(app, db)
+   
     return app
 
 app = create_app()

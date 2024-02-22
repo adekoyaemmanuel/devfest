@@ -2,9 +2,12 @@ from datetime import datetime
 import requests, json
 import os, random, string
 from functools import wraps
-from flask import render_template ,request, redirect, flash, url_for, session
+
+from flask import render_template ,request, redirect, flash, url_for, session, jsonify
 from werkzeug.security import generate_password_hash, check_password_hash
-from pkg import app, csrf
+from flask_mail import Message
+
+from pkg import app, csrf, mail
 from pkg.models import db, User, Level, State, Donation, Breakout, UserRegistration
 
 
@@ -253,8 +256,8 @@ def login():
                 flash('Invalid Credentials', category='error')
                 return redirect("/login")
         else:
-            flash('Incorrect Email', category='error')
-            return 'Invalid Credentials';
+            flash('Invalid Credentials', category='error')
+            return redirect("/login")
 @app.route("/logout/")
 def logout():
     if session.get("useronline") !=None:
@@ -264,7 +267,8 @@ def logout():
 @app.route("/register/", methods=['POST', 'GET'])
 def user_register():
     if request.method == 'GET':
-        return render_template('user/register.html')
+        states = State.query.all()
+        return render_template('user/register.html', states=states)
     else:
         #retrieve form fields:
         state=request.form.get('state')
@@ -287,5 +291,23 @@ def user_register():
             flash("Some of the form fields are blank", category="error")
             return redirect(url_for("user_register"))
 
+@app.route('/send/email/')
+def send_email():
+    msg = Message("Flask Subject", sender="email@domain.com", recipients=["adekoyaemmanuel762@gmail.com"])
+    msg.body = "This is a test email from our flask app"
+    msg.html="<h1>Python Class</h1><p style='color:blue;'>This is a Python and Flask Class</p><img src='C:/Users/user/Desktop/devfest/pkg/static/images/bag.jpg'/>"
+    # attaching files
+    with app.open_resource('ent.pdf') as file:
+        msg.attach('ent.pdf', 'application/pdf', file.read())
+    mail.send(msg)
+    return "Email was sent successfully"
 
-
+@app.route('/state/lgas/', methods=['POST'])
+def get_lgas():
+    stateId = request.form.get("stateId")
+    state = State.query.get_or_404(stateId)
+    lgas = state.lgas
+    lga_data = []
+    for lga in lgas:
+        lga_data.append({"lga_id":lga.lga_id, "lga_name":lga.lga_name})
+    return jsonify(lga_data)
